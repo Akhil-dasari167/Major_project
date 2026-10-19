@@ -27,7 +27,7 @@ All local preparation, dependency pruning, hardware compatibility adaptations, c
 | **7** | **Git Hygiene & Security** | **PASS** | [`.gitignore`](file:///c:/Users/srich/OneDrive/Tài%20liệu/akhilMajor/.gitignore) | Heavy datasets (`data/` 480 MB+), virtual environments (`.venv/`), outputs (`outputs/`), and secrets (`secrets.toml`, `.env`) strictly excluded. |
 | **8** | **Deployment Instructions** | **PASS** | [`DEPLOYMENT.md`](file:///c:/Users/srich/OneDrive/Tài%20liệu/akhilMajor/DEPLOYMENT.md) | Comprehensive step-by-step instructions for Streamlit Community Cloud. |
 | **9** | **Regression Test Suite** | **PASS** | `python -m unittest discover tests` | **26 passed, 0 failed, 0 skipped** (3.81s). |
-| **10** | **Remote Repo Audit** | **PENDING USER ACTION** | `https://github.com/Akhil-dasari167/Major_project` | User account verified; repository returned 404 (needs creation or private access confirmation). |
+| **10** | **Remote Repo Sync** | **PASS** | [`Akhil-dasari167/Major_project`](https://github.com/Akhil-dasari167/Major_project) | Published commit `48ca113` on branch `main`. Verified `app.py`, `requirements.txt`, `models/best_epoch_019.pt`, and `sample_images/` live on GitHub. |
 
 ---
 
