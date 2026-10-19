@@ -205,9 +205,18 @@ if active_hazy_img is not None:
             if gt_tensor.shape == pred_tensor.shape:
                 calculated_psnr = psnr(pred_tensor, gt_tensor)
                 calculated_ssim = ssim(pred_tensor, gt_tensor)
+                latency_ms = latency_sec * 1000
+
+                st.markdown("#### Quantitative Evaluation & Performance")
+                m_col1, m_col2, m_col3 = st.columns(3)
+                m_col1.metric("PSNR (Peak SNR)", f"{calculated_psnr:.4f} dB")
+                m_col2.metric("SSIM (Structural Similarity)", f"{calculated_ssim:.4f}")
+                m_col3.metric("Inference Latency", f"{latency_ms:.2f} ms")
+
                 st.success(
-                    f"**Ground-Truth Evaluation:** PSNR = **{calculated_psnr:.4f} dB** | SSIM = **{calculated_ssim:.4f}** "
-                    f"*(Calculated using standard IEEE full-reference formulas)*"
+                    f"**Verified Ground-Truth Benchmarks:** PSNR = **{calculated_psnr:.4f} dB** | "
+                    f"SSIM = **{calculated_ssim:.4f}** | Inference Time = **{latency_ms:.2f} ms** "
+                    f"*(Full-reference metrics computed via IEEE standard implementations)*"
                 )
             else:
                 st.warning(
@@ -218,13 +227,14 @@ if active_hazy_img is not None:
             col1, col2 = st.columns(2)
             col1.image(active_hazy_img, caption=f"Hazy Input ({active_hazy_img.width}×{active_hazy_img.height})", use_container_width=True)
             col2.image(dehazed_img, caption=f"Dehazed Result ({dehazed_img.width}×{dehazed_img.height})", use_container_width=True)
+            
+            latency_ms = latency_sec * 1000
+            m_col1, m_col2 = st.columns(2)
+            m_col1.metric("Inference Latency", f"{latency_ms:.2f} ms")
+            m_col2.metric("Processed Resolution", f"{dehazed_img.width} × {dehazed_img.height}")
             st.info("No ground-truth clean image provided. PSNR and SSIM are only computed when a reference image is uploaded.")
 
-        latency_ms = latency_sec * 1000
-        st.markdown(
-            f"**Execution Profile:** Inference latency: **{latency_ms:.2f} ms** | "
-            f"Output Size: **{dehazed_img.width}×{dehazed_img.height}** | Model: `{descriptor}`"
-        )
+        st.caption(f"Hardware & Execution: `{descriptor}` | Single-pass forward runtime: {latency_ms:.2f} ms")
 
         buffer = io.BytesIO()
         dehazed_img.save(buffer, format="PNG")
@@ -240,11 +250,23 @@ else:
     st.info("Upload a hazy RGB image or check the sample image option above to test the dehazing model.")
     st.markdown(
         """
-        ### Deployment Instructions:
-        This application is ready for deployment on **Streamlit Community Cloud**:
-        1. Push this repository to GitHub.
-        2. Visit [share.streamlit.io](https://share.streamlit.io).
-        3. Select your repository, branch (`main`), and set Main file path to `app.py`.
-        4. In Advanced Settings, specify Python 3.11 and Requirements file `requirements-deployment.txt`.
+        ---
+        ### Framework Overview & Operation Guide:
+
+        **Lightweight Edge-Aware Multi-Model Image Dehazing Framework** is an academic research project developed for Digital Image Processing (Department of Electronics and Communication Engineering, 2026–2027).
+
+        #### Key Technical Specifications:
+        - **Primary Architecture:** 4-Block Residual Convolutional Neural Network with explicit residual scale learning (`Stage 3.7 Experiment B`).
+        - **Model Footprint:** **75,747 parameters** (~911.7 KB checkpoint), optimized for edge and mobile robotics vision platforms.
+        - **Loss Formulation:** $0.8 \\mathcal{L}_{L1} + 0.2 \\mathcal{L}_{\\text{SSIM}}$ composite objective to suppress haze while preserving high-frequency edge gradients.
+        - **Benchmark Accuracy:** Achieves **13.00 dB PSNR / 0.4418 SSIM** on NH-HAZE validation, and **14.72 dB PSNR / 0.5441 SSIM** on the held-out benchmark.
+        - **Throughput:** ~182 ms / frame on CUDA GPU and highly responsive CPU execution.
+
+        #### How to Test:
+        1. **Instant Demo:** Enable the **"🧪 Use built-in test sample"** checkbox above to test NH-HAZE Scene 53.
+        2. **Custom Upload:** Upload any outdoor hazy photograph (PNG, JPEG, TIFF) to run native-resolution restoration.
+        3. **Quantitative Benchmarking:** Optionally upload the matching ground-truth clean photograph to inspect IEEE-standard PSNR and SSIM metrics.
+        4. **Export:** Click **"Download Dehazed Image (PNG)"** to save the restored high-resolution output.
         """
     )
+
