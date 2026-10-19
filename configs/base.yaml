@@ -1,0 +1,16 @@
+# Stage 1 project configuration placeholder.
+# Paths are intentionally relative to the repository root.
+
+paths:
+  nh_haze: data/NH-HAZE
+  ohaze_results: data/OHazeResultsSmall
+  raw: raw
+  processed: processed
+  outputs: outputs
+  checkpoints: checkpoints
+
+runtime:
+  device: cuda
+  seed: 42
+
+# Model and training settings will be added only in later approved stages.

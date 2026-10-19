@@ -1,0 +1,43 @@
+# Local Python virtual environment
+.venv/
+venv/
+ENV/
+env/
+
+# Python cache and byte-compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Secrets and environment variables
+.env
+*.env
+.streamlit/secrets.toml
+
+# Heavy datasets (NH-HAZE 330MB+, OHaze 150MB+)
+data/
+raw/
+processed/
+
+# Training artifacts, intermediate outputs, and run logs
+outputs/
+logs/
+runs/
+wandb/
+*.log
+
+# Checkpoints directory (keep only deployment model)
+checkpoints/
+models/*
+!models/best_epoch_019.pt
+!models/README.md
+
+# OS and Editor metadata
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

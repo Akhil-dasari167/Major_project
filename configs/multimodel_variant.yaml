@@ -1,0 +1,15 @@
+# Parsed by scripts/train_multimodel_variant.py without external YAML packages.
+seed: 42
+device: cuda
+epochs: 12
+batch_size: 2
+patch_size: 256
+learning_rate: 0.0001
+residual_scale: 0.2
+base_channels: 24
+loss_alpha: 0.8
+early_stopping_patience: 4
+augment_horizontal_flip: true
+split: outputs/v0_pilot_001/split.json
+data_root: data/NH-HAZE
+

@@ -1,0 +1,16 @@
+# Documented defaults for V0. CLI arguments in scripts/train_v0.py are authoritative.
+model:
+  name: v0_residual_cnn
+  base_channels: 32
+  residual_blocks: 4
+data:
+  patch_size: 256
+  train_pairs: 39
+  validation_pairs: 8
+  test_pairs: 8
+  seed: 42
+training:
+  epochs: 100
+  batch_size: 2
+  learning_rate: 0.0002
+  loss: l1

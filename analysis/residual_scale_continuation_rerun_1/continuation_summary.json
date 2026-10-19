@@ -1,0 +1,26 @@
+{
+  "0.2": {
+    "scale": 0.2,
+    "best_checkpoint": "outputs\\residual_scale_continuation_0p2_rerun_1\\best_epoch_020.pt",
+    "best_row": {
+      "epoch": 20,
+      "train_l1": 0.16851775348186493,
+      "validation_l1": 0.19218514300882816,
+      "validation_psnr": 12.836718784869273,
+      "validation_ssim": 0.42682313174009323,
+      "train_batches": 20,
+      "validation_batches": 8,
+      "skipped_train_batches": 0,
+      "skipped_validation_batches": 0,
+      "mean_abs_correction": 0.11959921894595027,
+      "mean_signed_correction": -0.11114265862852335,
+      "near_bound_fraction": 0.33887137239798903,
+      "clamped_fraction": 0.00022120225366961677
+    },
+    "runtime_seconds": 290.19319030013867,
+    "actual_train_steps": 400,
+    "actual_validation_steps": 160,
+    "skipped_train_batches": 0,
+    "skipped_validation_batches": 0
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "mean_latency_ms": 275.97593502141535,
+  "resolution": "1200x1600",
+  "device": "cuda",
+  "device_name": "NVIDIA GeForce RTX 3050 Laptop GPU"
+}

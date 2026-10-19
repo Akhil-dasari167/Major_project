@@ -1,0 +1,9 @@
+# Minimal deployment requirements for Streamlit Community Cloud
+# Excludes CUDA-specific flags, heavyweight training dependencies, and GUI bindings.
+
+streamlit>=1.30.0
+torch>=2.2.0
+torchvision>=0.17.0
+Pillow>=10.0.0
+numpy>=1.24.0
+scikit-image>=0.21.0
