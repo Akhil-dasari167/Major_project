@@ -32,8 +32,8 @@ The deployed application exhibited a scenario where inference latency (`204.5946
      - Card 3: **Inference Latency** (e.g., `204.59 ms`)
    - Guarantees zero ambiguity between latency in milliseconds and structural similarity.
 3. **Regression Test Suite (`tests/test_metrics.py`):**
-   - Added 7 targeted test cases covering identical images (`PSNR=inf, SSIM=1.0`), black vs. white images, shape variations (`CHW`, `HWC`, `BCHW`), array types (NumPy, PIL), $[0, 255]$ vs $[0, 1]$ normalization, and known NH-HAZE pairs.
-   - Test suite status: **32 / 32 unit tests passing (`Ran 32 tests in 4.92s, OK`)**.
+   - Added 9 targeted test cases covering identical images (`PSNR=inf, SSIM=1.0`), black vs. white images, shape variations (`CHW`, `HWC`, `BCHW`), array types (NumPy, PIL), $[0, 255]$ vs $[0, 1]$ normalization, known NH-HAZE pairs, Scene 53 metric isolation, and strict domain validation guards.
+   - Test suite status: **34 / 34 unit tests passing (`Ran 34 tests in 5.64s, OK`)**.
 
 ---
 

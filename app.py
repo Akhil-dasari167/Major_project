@@ -207,6 +207,13 @@ if active_hazy_img is not None:
                 calculated_ssim = ssim(pred_tensor, gt_tensor)
                 latency_ms = latency_sec * 1000
 
+                # Strict validation guard: enforce SSIM domain [-1.0, 1.0] before UI presentation
+                if not (-1.0 <= calculated_ssim <= 1.0):
+                    raise ValueError(
+                        f"SSIM value {calculated_ssim} is outside valid mathematical range [-1.0, 1.0]. "
+                        "Check image normalization and metric pipeline."
+                    )
+
                 st.markdown("#### Quantitative Evaluation & Performance")
                 m_col1, m_col2, m_col3 = st.columns(3)
                 m_col1.metric("PSNR (Peak SNR)", f"{calculated_psnr:.4f} dB")

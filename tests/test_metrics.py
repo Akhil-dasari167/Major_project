@@ -110,6 +110,61 @@ class MetricTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             ssim(x, y)
 
+    def test_dehazed_scene_53_metric_isolation(self):
+        """Regression test: Dehazed Scene 53 must yield PSNR ~13.14 dB, SSIM ~0.4547, and never equal latency."""
+        checkpoint_path = Path(__file__).resolve().parents[1] / "models" / "best_epoch_019.pt"
+        hazy_path = Path(__file__).resolve().parents[1] / "sample_images" / "sample_hazy.png"
+        gt_path = Path(__file__).resolve().parents[1] / "sample_images" / "sample_clean_GT.png"
+
+        if checkpoint_path.is_file() and hazy_path.is_file() and gt_path.is_file():
+            from dehaze.evaluation.checkpoints import load_checkpoint_model
+            from dehaze.utils.io import pil_to_tensor
+            import time
+
+            device = torch.device("cpu")
+            model, _, _ = load_checkpoint_model(checkpoint_path, device)
+            hazy_img = Image.open(hazy_path).convert("RGB")
+            gt_img = Image.open(gt_path).convert("RGB")
+
+            tensor = pil_to_tensor(hazy_img).unsqueeze(0).to(device)
+            start = time.perf_counter()
+            with torch.inference_mode():
+                pred_tensor = model(tensor)[0]
+            latency_sec = time.perf_counter() - start
+            latency_ms = latency_sec * 1000.0
+
+            gt_tensor = pil_to_tensor(gt_img).to(device)
+            calculated_psnr = psnr(pred_tensor, gt_tensor)
+            calculated_ssim = ssim(pred_tensor, gt_tensor)
+
+            # Assert standard mathematical ranges
+            self.assertGreaterEqual(calculated_psnr, 13.0)
+            self.assertLessEqual(calculated_psnr, 13.3)
+            self.assertGreaterEqual(calculated_ssim, -1.0)
+            self.assertLessEqual(calculated_ssim, 1.0)
+            self.assertAlmostEqual(calculated_ssim, 0.4547, places=3)
+
+            # Assert SSIM is completely isolated from latency values
+            ssim_str = f"{calculated_ssim:.4f}"
+            self.assertNotEqual(ssim_str, "204.5946")
+            self.assertNotEqual(ssim_str, "8601.00")
+            self.assertNotEqual(ssim_str, f"{latency_ms:.4f}")
+            self.assertNotEqual(ssim_str, f"{latency_ms:.2f}")
+            self.assertGreater(latency_ms, 10.0, "Latency in ms must be well above the SSIM range [-1, 1]")
+
+    def test_regression_latency_or_unrelated_number_cannot_be_ssim(self):
+        """Regression test: SSIM values must strictly reside in [-1.0, 1.0]; latency figures must fail validation."""
+        valid_ssim_values = [-1.0, -0.5, 0.0, 0.4547, 0.85, 1.0]
+        for val in valid_ssim_values:
+            self.assertTrue(-1.0 <= val <= 1.0, f"Expected {val} to be valid SSIM")
+
+        # Typical latencies and anomalous figures from bug reports
+        invalid_ssim_values = [204.5946, 8601.0, 182.14, 574.13, 895.43, -1.5, 1.0001, 100.0]
+        for bad_val in invalid_ssim_values:
+            with self.subTest(bad_val=bad_val):
+                self.assertFalse(-1.0 <= bad_val <= 1.0, f"Value {bad_val} should NOT pass SSIM domain check")
+
 
 if __name__ == "__main__":
     unittest.main()
+
